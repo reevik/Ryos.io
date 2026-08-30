@@ -1,0 +1,45 @@
+{% comment %}
+  Newsletter signup for ryos.io. Posts to the same-origin io.ryos.api service
+  (https://ryos.io/api): GET /captcha for the challenge image, POST /subscribe
+  with email + captcha. Double opt-in — the confirmation email links back to
+  /api/verify. No backend of its own; this is just markup + assets/js/subscribe.js.
+{% endcomment %}
+<div class="subscribe" data-api="{{ '/api' | relative_url }}">
+  <form class="subscribe-form" novalidate>
+    <div class="form-group">
+      <label for="subscribe-email">Email address</label>
+      <input type="email" id="subscribe-email" name="email" class="form-control"
+             placeholder="you@example.com" autocomplete="email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="subscribe-captcha">Enter the characters shown</label>
+      <div class="subscribe-captcha">
+        <img class="subscribe-captcha-img" alt="Captcha challenge" width="200" height="50">
+        <button type="button" class="subscribe-captcha-refresh" aria-label="Show a different image">&#8635;</button>
+      </div>
+      <input type="text" id="subscribe-captcha" name="captcha" class="form-control"
+             autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+    </div>
+
+    <button type="submit" class="button subscribe-submit">Subscribe</button>
+    <p class="subscribe-message" role="status" aria-live="polite" hidden></p>
+  </form>
+</div>
+
+<style>
+  .subscribe { max-width: 28rem; }
+  .subscribe .form-group { margin-bottom: 1rem; }
+  .subscribe-captcha { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; }
+  .subscribe-captcha-img { border: 1px solid #e0e0e0; border-radius: 4px; background: #fff; }
+  .subscribe-captcha-refresh {
+    border: 1px solid #e0e0e0; background: #fff; border-radius: 4px;
+    width: 2.25rem; height: 2.25rem; font-size: 1.1rem; line-height: 1; cursor: pointer;
+  }
+  .subscribe-message { margin-top: .75rem; font-size: .95rem; }
+  .subscribe-message.is-error { color: #b02a37; }
+  .subscribe-message.is-ok { color: #1a7f37; }
+  .subscribe-submit[disabled] { opacity: .6; cursor: default; }
+</style>
+
+<script src="{{ '/assets/js/subscribe.js' | relative_url }}" defer></script>
