@@ -1,3 +1,4 @@
+url: 'https://ryos.io'
 baseurl: '/'
 permalink: pretty
 title: 'Jekyll Serif'
@@ -39,6 +40,7 @@ plugins:
   - jekyll-environment-variables
 
 exclude:
+  - netlify.toml
   - Gemfile
   - Gemfile.lock
   - node_modules

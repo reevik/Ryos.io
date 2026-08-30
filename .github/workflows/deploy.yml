@@ -1,0 +1,109 @@
+name: Build and deploy
+
+# Builds the site on GitHub and copies the result to the ryos.io vhost over SSH.
+# The production host keeps no Ruby toolchain, and a build that fails never
+# reaches the live site.
+#
+# This box also serves reevik.net from a separate vhost. Every path below is
+# confined to the ryos.io docroot; nothing here can touch reevik.net.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # lets you redeploy by hand from the Actions tab
+
+concurrency:
+  # A newer push supersedes one still deploying, rather than racing it.
+  group: deploy-ryos-production
+  cancel-in-progress: false
+
+env:
+  SSH_HOST: reevik.net      # the box; ryos.io is a vhost on it, and the
+                            # committed known_hosts pins this name
+  SITE: ryos.io
+  DOCROOT: /var/www/vhosts/ryos.io/httpdocs
+  VHOST_USER: ryos.io_w9c7h49jos
+  VHOST_GROUP: psacln
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          # 3.2 matches the RUBY_VERSION the theme shipped in netlify.toml.
+          # Note this repo has NO Ruby-3.1 constraint: the sibling blog repo is
+          # pinned to 3.1 because Jekyll 3.10 pins liquid 4.0.1, which calls the
+          # Object#tainted? that Ruby 3.2 removed. Serif is on Jekyll 4.4 /
+          # liquid 4.0.4, which dropped taint checking entirely.
+          ruby-version: '3.2'
+          bundler-cache: true      # installs gems and caches them between runs
+
+      - name: Build
+        env:
+          JEKYLL_ENV: production
+        run: bundle exec jekyll build
+
+      - name: Sanity-check the build
+        # A Jekyll build can "succeed" and still produce nothing useful. Deploying
+        # that over a working site is how a site goes blank, so check first.
+        # The site builds 20 pages today; 15 leaves room for content edits while
+        # still catching a collapse to a near-empty _site.
+        run: |
+          test -f _site/index.html || { echo "::error::no index.html in _site"; exit 1; }
+          count=$(find _site -name index.html | wc -l)
+          echo "built $count pages"
+          [ "$count" -ge 15 ] || { echo "::error::only $count pages built, expected 15+"; exit 1; }
+
+      - name: Set up SSH
+        run: |
+          if [ -z "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+            echo "::error::DEPLOY_SSH_KEY secret is not set — add it under Settings > Secrets and variables > Actions (see DEPLOYMENT.md)"
+            exit 1
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # The server's host keys are committed at .github/known_hosts. A host's
+          # public key is not a secret, so keeping it in the repo removes a setup
+          # step and a failure mode, while still pinning the host — no
+          # trust-on-first-use. Refresh the file if the server is ever rebuilt.
+          install -m 644 .github/known_hosts ~/.ssh/known_hosts
+
+      - name: Copy to the vhost
+        # --delete is safe here, unlike the reevik.net docroot which also holds an
+        # API and other projects: this docroot serves nothing but this site.
+        # .well-known is excluded so a deploy can never remove an ACME challenge
+        # mid-renewal and break TLS.
+        #
+        # --no-owner --no-group matters. Without them rsync-as-root stamps the
+        # runner's uid/gid onto the docroot directory itself, leaving it owned by
+        # a stranger; ownership is set explicitly in the next step instead.
+        run: |
+          rsync -az --delete --exclude '.well-known/' \
+            --no-owner --no-group \
+            --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
+            -e "ssh -i ~/.ssh/deploy_key -o BatchMode=yes" \
+            _site/ root@${SSH_HOST}:${DOCROOT}/
+
+      - name: Hand the files back to the vhost user
+        # rsync runs as root; Plesk expects the vhost's own user to own the files.
+        # The docroot *directory* is deliberately reset separately: Plesk creates
+        # it as VHOST_USER:psaserv mode 750, which differs from the psacln/755 its
+        # contents want, and a blanket chown -R would quietly flatten that.
+        run: |
+          ssh -i ~/.ssh/deploy_key -o BatchMode=yes root@${SSH_HOST} "
+            find ${DOCROOT} -mindepth 1 -exec chown ${VHOST_USER}:${VHOST_GROUP} {} + &&
+            chown ${VHOST_USER}:psaserv ${DOCROOT} &&
+            chmod 750 ${DOCROOT}
+          "
+
+      - name: Verify the live site
+        run: |
+          for path in / /about/ /services/ /team/ /contact/; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://${SITE}${path}")
+            echo "$code  $path"
+            [ "$code" = "200" ] || { echo "::error::${path} returned $code"; exit 1; }
+          done
