@@ -39,6 +39,7 @@
     "already-subscribed": ["You're already subscribed. Thanks!", "ok"],
     email: ["Please enter a valid email address.", "error"],
     captcha: ["That captcha didn't match — here's a new one.", "error"],
+    "mail-failed": ["We couldn't send the confirmation email — please check the address and try again.", "error"],
   };
 
   form.addEventListener("submit", function (e) {
