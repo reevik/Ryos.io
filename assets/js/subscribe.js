@@ -40,6 +40,7 @@
     email: ["Please enter a valid email address.", "error"],
     captcha: ["That captcha didn't match — here's a new one.", "error"],
     "mail-failed": ["We couldn't send the confirmation email — please check the address and try again.", "error"],
+    "rate-limited": ["Too many attempts — please wait a few minutes and try again.", "error"],
   };
 
   form.addEventListener("submit", function (e) {
@@ -54,9 +55,11 @@
     submit.disabled = true;
     say("Submitting…");
 
+    var honeypot = root.querySelector("#subscribe-website");
     var body = new URLSearchParams();
     body.set("email", email.value.trim());
     body.set("captcha", captcha.value.trim());
+    body.set("website", honeypot ? honeypot.value : "");
 
     fetch(api + "/subscribe", {
       method: "POST",

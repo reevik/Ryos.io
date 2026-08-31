@@ -22,6 +22,11 @@
              autocomplete="off" autocapitalize="characters" spellcheck="false" required>
     </div>
 
+    <div class="subscribe-hp" aria-hidden="true">
+      <label for="subscribe-website">Website</label>
+      <input type="text" id="subscribe-website" name="website" autocomplete="off" tabindex="-1">
+    </div>
+
     <button type="submit" class="button subscribe-submit">Subscribe</button>
     <p class="subscribe-message" role="status" aria-live="polite" hidden></p>
   </form>
@@ -39,6 +44,7 @@
   .subscribe-message { margin-top: .75rem; font-size: .95rem; }
   .subscribe-message.is-error { color: #b02a37; }
   .subscribe-message.is-ok { color: #1a7f37; }
+  .subscribe-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .subscribe-submit[disabled] { opacity: .6; cursor: default; }
 </style>
 
