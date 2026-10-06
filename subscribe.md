@@ -11,7 +11,7 @@ permalink: /subscribe/
       <div class="service service-single">
         <h1 class="title">Subscribe</h1>
         <div class="content mt-4">
-          <p>Get occasional updates about Rust ADE and ryos.io. You'll receive a
+          <p>Get occasional updates about Proscenium Agentic RPG Studio and ryos.io. You'll receive a
           confirmation email — click the link in it to finish. Unsubscribe anytime.</p>
           {% include subscribe.html %}
         </div>
