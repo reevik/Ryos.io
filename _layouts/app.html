@@ -1,0 +1,215 @@
+---
+layout: default
+---
+{%- assign a = page.app -%}
+{%- assign upname = page.title | upcase -%}
+
+<!-- begin app-page: a product landing page, data in the page's `app:` front matter -->
+<div class="app-page">
+
+  <nav class="ap-index" aria-label="On this page">
+    <a href="#{{ page.slug }}" data-ap-index="{{ page.slug }}">{{ page.title }}</a>
+    <a href="#highlights" data-ap-index="highlights">Highlights</a>
+    <a href="#screenshots" data-ap-index="screenshots">Screenshots</a>
+    <a href="#under-the-hood" data-ap-index="under-the-hood">Under the hood</a>
+    <a href="#start" data-ap-index="start">Get started</a>
+  </nav>
+
+  <!-- 01 hero -->
+  <section class="ap-section" id="{{ page.slug }}">
+    <div class="ap-frame">
+      <div class="ap-bar">
+        <span class="ap-mono">01 / {{ upname }}</span>
+        <span class="ap-mono ap-faint">{{ a.kicker }}</span>
+      </div>
+
+      <div class="ap-hero ap-reveal">
+        {% if a.icon %}<img class="ap-hero__icon" src="{{ a.icon | relative_url }}" alt="{{ page.title }} icon">{% endif %}
+        <div class="ap-hero__badge">
+          <span class="ap-num">{{ a.number }}</span>
+          <span class="ap-hero__name">{{ a.name_plain }}<span class="ap-accent">{{ a.name_accent }}</span></span>
+        </div>
+        <h1 class="ap-h1">{{ a.headline_before }} <span class="ap-accent">{{ a.headline_accent }}</span> {{ a.headline_after }}</h1>
+        <p class="ap-lede">{{ a.lede }}</p>
+        <div class="ap-buttons">
+          {% for b in a.buttons %}
+          <a class="ap-btn{% if b.primary %} ap-btn--primary{% endif %}" href="{{ b.url | relative_url }}">{% if b.icon %}<i class="{{ b.icon }}"></i>{% endif %}{{ b.label }}</a>
+          {% endfor %}
+        </div>
+        {% if a.note %}<div class="ap-mono ap-faint ap-hero__note">{{ a.note }}</div>{% endif %}
+        {% if a.platforms %}
+        <div class="ap-mono ap-faint ap-hero__platforms">
+          {% for p in a.platforms %}<span>{{ p }}</span>{% unless forloop.last %}<span class="ap-dot">·</span>{% endunless %}{% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      {% if a.hero_shot %}
+      <figure class="ap-shot ap-shot--hero ap-reveal">
+        <div class="ap-bar ap-bar--top">
+          <span class="ap-mono ap-faint">{{ a.hero_shot.caption }}</span>
+          <span class="ap-mono ap-faint">{{ a.hero_shot.meta }}</span>
+        </div>
+        <img src="{{ a.hero_shot.src | relative_url }}" alt="{{ a.hero_shot.caption }}">
+      </figure>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- 02 highlights -->
+  <section class="ap-section" id="highlights">
+    <div class="ap-frame">
+      <div class="ap-bar">
+        <span class="ap-mono">02 / Highlights</span>
+        <span class="ap-mono ap-faint">{{ page.label }}</span>
+      </div>
+      <div class="ap-head ap-reveal">
+        <h2 class="ap-h2">{{ a.highlights_title_plain }} <span class="ap-accent">{{ a.highlights_title_accent }}</span>.</h2>
+      </div>
+      <div class="ap-grid ap-grid--3">
+        {% for h in a.highlights %}
+        <div class="ap-cell ap-reveal">
+          <span class="ap-mono ap-faint ap-cell__num">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+          <h3 class="ap-h3">{{ h.title }}</h3>
+          <p>{{ h.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 screenshots -->
+  <section class="ap-section" id="screenshots">
+    <div class="ap-frame">
+      <div class="ap-bar">
+        <span class="ap-mono">03 / Screenshots</span>
+        <span class="ap-mono ap-faint">Captured in {{ page.title }}</span>
+      </div>
+      {% assign first = a.shots | first %}
+      <figure class="ap-shot ap-reveal">
+        <img src="{{ first.src | relative_url }}" loading="lazy" alt="{{ first.caption }}">
+        <figcaption class="ap-bar ap-bar--bottom">
+          <span class="ap-mono ap-faint">{{ first.caption }}</span>
+          <span class="ap-mono ap-faint">01</span>
+        </figcaption>
+      </figure>
+      <div class="ap-grid ap-grid--2">
+        {% for s in a.shots offset:1 %}
+        <figure class="ap-shot ap-cell ap-cell--flush ap-reveal">
+          <img src="{{ s.src | relative_url }}" loading="lazy" alt="{{ s.caption }}">
+          <figcaption class="ap-bar ap-bar--bottom">
+            <span class="ap-mono ap-faint">{{ s.caption }}</span>
+            <span class="ap-mono ap-faint">0{{ forloop.index | plus: 1 }}</span>
+          </figcaption>
+        </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 under the hood -->
+  <section class="ap-section" id="under-the-hood">
+    <div class="ap-frame">
+      <div class="ap-bar">
+        <span class="ap-mono">04 / Under the hood</span>
+        <span class="ap-mono ap-faint">Plain JSON · Plain Lua</span>
+      </div>
+
+      <div class="ap-split ap-split--wide">
+        <div class="ap-split__main ap-reveal">
+          <div class="ap-eyebrow">
+            {% if a.icon %}<img src="{{ a.icon | relative_url }}" alt="">{% endif %}
+            <span class="ap-mono ap-accent">{{ a.agent.eyebrow }}</span>
+          </div>
+          <h2 class="ap-h2 ap-h2--md">{{ a.agent.title_plain }} <span class="ap-accent">{{ a.agent.title_accent }}</span> {{ a.agent.title_after }}</h2>
+          <p class="ap-body">{{ a.agent.text }}</p>
+          <ul class="ap-checks">
+            {% for c in a.agent.checks %}<li class="ap-mono"><i class="fa-solid fa-check"></i>{{ c }}</li>{% endfor %}
+          </ul>
+        </div>
+        <div class="ap-split__side ap-reveal">
+          <div class="ap-mono ap-faint">{{ a.agent.panel_label }}</div>
+          <div class="ap-prompt"><span class="ap-accent">›</span> {{ a.agent.prompt }}</div>
+          <pre class="ap-terminal ap-terminal--plain"><code>{{ a.agent.output | xml_escape }}</code></pre>
+          <div class="ap-mono ap-faint">{{ a.agent.panel_note }}</div>
+        </div>
+      </div>
+
+      <div class="ap-grid ap-grid--2 ap-grid--top">
+        {% for c in a.code %}
+        <div class="ap-cell ap-cell--code ap-reveal">
+          <div class="ap-mono ap-faint">{{ c.eyebrow }}</div>
+          <h2 class="ap-h2 ap-h2--md">{{ c.title_plain }} <span class="ap-accent">{{ c.title_accent }}</span>.</h2>
+          <p class="ap-body">{{ c.text }}</p>
+          <div class="ap-terminal">
+            <div class="ap-terminal__bar ap-mono"><i class="fa-solid fa-terminal"></i>{{ c.label }}</div>
+            <pre><code>{{ c.body | xml_escape }}</code></pre>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="ap-grid ap-grid--3 ap-grid--top">
+        {% for s in a.stack %}
+        <div class="ap-cell ap-cell--stack ap-reveal">
+          <div class="ap-cell__row">
+            <span class="ap-mono {% if forloop.first %}ap-accent{% else %}ap-faint{% endif %}">{{ s.label }}</span>
+            <span class="ap-mono ap-faint">0{{ forloop.index }}</span>
+          </div>
+          <h3 class="ap-h3">{{ s.name }}</h3>
+          <p class="ap-small">{{ s.text }}</p>
+          <div class="ap-mono ap-faint ap-stack__label">Inside {{ s.label | downcase }}</div>
+          <ul class="ap-files">
+            {% for i in s.items %}
+            <li>
+              <strong>{{ i.name }}</strong>
+              <span>{{ i.text }}</span>
+              <code>{{ i.file }}</code>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 get started -->
+  <section class="ap-section" id="start">
+    <div class="ap-frame">
+      <div class="ap-cta ap-reveal">
+        <div class="ap-mono ap-faint">{{ a.cta_eyebrow }}</div>
+        <h2 class="ap-h1 ap-h1--cta">{{ a.cta_plain }}<span class="ap-accent">{{ a.cta_accent }}</span></h2>
+        <p class="ap-lede">{{ a.cta_text }}</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+<!-- end app-page -->
+
+<script>
+  (function () {
+    var root = document.querySelector('.app-page');
+    if (!root || !('IntersectionObserver' in window)) return;
+    root.classList.add('is-animated');
+
+    // Fade sections in as they scroll into view.
+    var reveal = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); reveal.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    root.querySelectorAll('.ap-reveal').forEach(function (el) { reveal.observe(el); });
+
+    // Highlight the section in view in the right-hand index.
+    var links = root.querySelectorAll('[data-ap-index]');
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (l) { l.classList.toggle('is-active', l.dataset.apIndex === e.target.id); });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    root.querySelectorAll('.ap-section').forEach(function (s) { spy.observe(s); });
+  })();
+</script>
