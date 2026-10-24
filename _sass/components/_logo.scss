@@ -1,31 +1,31 @@
+/* Header lockup: the Proscenium app icon beside the site name. The name is real
+   text rather than a baked image, so it scales, stays selectable and picks up
+   the site title from _config.yml. */
 .logo {
-  display: none;
-  @include media-breakpoint-up(sm) {
-    display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
   }
-  img {
+
+  .logo-mark {
+    display: block;
+    width: 32px;
+    height: 32px;
     max-width: unset;
+    border-radius: 7px; /* matches the icon's own corner radius at this size */
+    flex: 0 0 auto;
   }
-  a {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-}
-.logo-mobile {
-  display: block;
-  width: 40px;
-  padding: 10px 0 10px 0;
-  @include media-breakpoint-up(sm) {
-    display: none;
-  }
-  img {
-    width: 100%;
-    height: auto;
-  }
-  a {
-    display: block;
-    width: 100%;
-    height: 100%;
+
+  .logo-word {
+    font-family: $font-family-heading;
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 700;
+    color: $black;
+    white-space: nowrap;
   }
 }
