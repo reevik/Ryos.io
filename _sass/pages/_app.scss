@@ -68,13 +68,27 @@ body:has(.app-page) {
   text-decoration: none;
 }
 
-/* Frame: one 1280px column with hairline sides; every section sits in it. */
+/* Frame: one column matching the site header's container, with hairline sides;
+   every section sits in it. */
 .ap-frame {
   position: relative;
-  max-width: 1280px;
   margin: 0 auto;
   border-left: 1px solid var(--ap-line);
   border-right: 1px solid var(--ap-line);
+
+  /* Line the frame up with the site header. Bootstrap's .container is
+     $container-max-widths wide *including* $grid-gutter-width of padding, so the
+     nav's visible run — logo to the last item — is ($w - $grid-gutter-width).
+     Matching that puts the frame's rules directly under the logo and the last
+     nav item. Derived from the same map so the two stay aligned if the theme's
+     container ever changes. */
+  width: calc(100% - #{$grid-gutter-width});
+
+  @each $bp, $w in $container-max-widths {
+    @include media-breakpoint-up($bp) {
+      max-width: $w - $grid-gutter-width;
+    }
+  }
 }
 
 .ap-section {
