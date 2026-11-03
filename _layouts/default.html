@@ -12,7 +12,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <!-- Self host font -->
   <!-- <link rel="preload" href="{{ '/assets/fonts/playfair-display.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin> -->
-  <link href="{{ '/assets/css/style.css' | relative_url }}" rel="stylesheet">
+  <!-- ?v= is the build time, so a deploy can never pair new markup with a
+       stylesheet the browser cached from the previous one. That mismatch is
+       exactly how the header briefly showed both the full logo and the
+       mark-only version at once: the markup gained a second element before the
+       cached CSS knew to hide it. -->
+  <link href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
 
   {% if page.layout == 'app' %}
   <!-- The app landing layout's own type and icons; other pages don't pay for these. -->
@@ -40,7 +45,7 @@
   </div>
   {% include footer.html %}
   {% include sub-footer.html %}
-  <script type="text/javascript" src="{{ '/assets/js/scripts.js' | relative_url }}"></script>
+  <script type="text/javascript" src="{{ '/assets/js/scripts.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
   {% include google-analytics.html %}
 </body>
 </html>
