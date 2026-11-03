@@ -1,15 +1,16 @@
 url: 'https://ryos.io'
 baseurl: '/'
 permalink: pretty
-title: 'Proscenium'
+title: 'ryos.io'
 
 logo:
-  mobile: "images/logo/proscenium-mark.png"
+  # 2x assets rendered at half size, so the lockup stays sharp on retina.
+  mobile: "images/logo/ryos-mark.png"
   mobile_height: "32px"
   mobile_width: "32px"
-  desktop: "images/logo/proscenium-mark.png"
+  desktop: "images/logo/ryos-logo.png"
   desktop_height: "32px"
-  desktop_width: "32px"
+  desktop_width: "100px"
 
 home: 
   limit_services: 6

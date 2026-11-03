@@ -1,31 +1,33 @@
-/* Header lockup: the Proscenium app icon beside the site name. The name is real
-   text rather than a baked image, so it scales, stays selectable and picks up
-   the site title from _config.yml. */
-.logo {
+/* Header logo: the full ryos lockup on desktop, the mark alone on phones where
+   the wordmark would be too small to read. Both are 2x assets drawn at half
+   size, so they stay sharp on retina. */
+.logo,
+.logo-mobile {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
 
   &:hover {
     text-decoration: none;
   }
 
-  .logo-mark {
+  img {
     display: block;
-    width: 32px;
+    width: auto;
     height: 32px;
     max-width: unset;
-    border-radius: 7px; /* matches the icon's own corner radius at this size */
-    flex: 0 0 auto;
   }
+}
 
-  .logo-word {
-    font-family: $font-family-heading;
-    font-size: 22px;
-    line-height: 1;
-    font-weight: 700;
-    color: $black;
-    white-space: nowrap;
+.logo {
+  display: none;
+  @include media-breakpoint-up(sm) {
+    display: flex;
+  }
+}
+
+.logo-mobile {
+  @include media-breakpoint-up(sm) {
+    display: none;
   }
 }
