@@ -1,11 +1,15 @@
 ---
 ---
 
-// Colors
-$primary: #e5261f;
-$primary-dark: #a01b16;
-$secondary: #f88379;
-$black: #2f2f41;
+// Colors — taken from the ryos logo: its orange for accents, its navy for text.
+// The mark's orange runs #992100 to #fd7247; $primary is the point in that range
+// that still clears WCAG AA on white (4.88:1), since it colours body links. The
+// front page's own --ap-accent (#e5532d) is lighter and only ever sits on display
+// type, so it stays as it is.
+$primary: #c9431c;
+$primary-dark: #992100;
+$secondary: #ef9d7f;
+$black: #213148;
 $white: #ffffff;
 $white-offset: #fff6f8;
 $steel: #5c5a5a;
