@@ -134,10 +134,6 @@ body:has(.app-page) {
    (Local change; upstream starts the side lines at the first bar instead.) */
 .ap-section:first-of-type > .ap-frame {
   border-top: 1px solid var(--ap-line);
-
-  > .ap-bar:first-child {
-    border-bottom: 0;
-  }
 }
 
 /* Type */
@@ -226,6 +222,14 @@ body:has(.app-page) {
   gap: 8px 24px;
   padding: 12px 40px;
   border-bottom: 1px solid var(--ap-line);
+}
+
+/* A section-label bar sits directly under the line that opens its section, so a
+   second rule beneath the label only doubles it. Figure captions keep theirs —
+   --top and --bottom separate a caption from its image, which is a real edge.
+   (Local change; upstream rules under every label.) */
+.ap-frame > .ap-bar {
+  border-bottom: 0;
 }
 
 .ap-bar--top {
