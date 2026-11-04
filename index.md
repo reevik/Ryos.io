@@ -9,7 +9,6 @@ image: '/images/proscenium/proscenium-samurai.jpg'
 
 app:
   number: '01'
-  kicker: Game studio · Early alpha
   icon: '/images/proscenium/proscenium-icon.png'
   name_plain: Prosce
   name_accent: nium

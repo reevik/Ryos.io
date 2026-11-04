@@ -2,7 +2,6 @@
 layout: default
 ---
 {%- assign a = page.app -%}
-{%- assign upname = page.title | upcase -%}
 
 <!-- begin app-page: a product landing page, data in the page's `app:` front matter -->
 <div class="app-page">
@@ -19,11 +18,6 @@ layout: default
   <!-- 01 hero -->
   <section class="ap-section" id="{{ page.slug }}">
     <div class="ap-frame">
-      <div class="ap-bar">
-        <span class="ap-mono">01 / {{ upname }}</span>
-        <span class="ap-mono ap-faint">{{ a.kicker }}</span>
-      </div>
-
       <div class="ap-hero ap-reveal">
         {% if a.icon %}<img class="ap-hero__icon" src="{{ a.icon | relative_url }}" alt="{{ page.title }} icon">{% endif %}
         <div class="ap-hero__badge">
@@ -63,7 +57,7 @@ layout: default
   <section class="ap-section" id="highlights">
     <div class="ap-frame">
       <div class="ap-bar">
-        <span class="ap-mono">02 / Highlights</span>
+        <span class="ap-mono">01 / Highlights</span>
         <span class="ap-mono ap-faint">{{ page.label }}</span>
       </div>
       <div class="ap-head ap-reveal">
@@ -81,7 +75,7 @@ layout: default
     </div>
   </section>
 
-  {%- assign n = 3 -%}
+  {%- assign n = 2 -%}
   {% if a.videos %}
   <!-- videos -->
   <section class="ap-section" id="videos">
