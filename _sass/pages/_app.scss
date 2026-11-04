@@ -33,7 +33,11 @@ body:has(.app-page) {
   background: var(--ap-bg);
 
   .header {
-    margin-bottom: 24px;
+    /* Flush: the frame's top line sits directly under the logo, so the gap and
+       the header's own border would only repeat it. (Local change; upstream
+       keeps the 24px and its header rule.) */
+    margin-bottom: 0;
+    border-bottom: 0;
   }
 
   .content {
@@ -124,13 +128,15 @@ body:has(.app-page) {
 
 /* The page opens on the first bar's bottom line: the frame's side lines start
    there instead of running up past it into the open space above. */
+/* The page opens on one hairline, directly under the logo: the frame's top
+   border. There used to be two — the header's own border and the first bar's,
+   with a gap between them. The side lines run from that single line down.
+   (Local change; upstream starts the side lines at the first bar instead.) */
 .ap-section:first-of-type > .ap-frame {
-  border-left: 0;
-  border-right: 0;
+  border-top: 1px solid var(--ap-line);
 
-  > :not(.ap-bar:first-child) {
-    border-left: 1px solid var(--ap-line);
-    border-right: 1px solid var(--ap-line);
+  > .ap-bar:first-child {
+    border-bottom: 0;
   }
 }
 
