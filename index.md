@@ -21,9 +21,9 @@ app:
     coding agent that builds the world with you. Written in Rust on Bevy,
     scripted in Lua, and yours.
   buttons:
-    - label: Get updates
-      url: /subscribe/
-      icon: fa-regular fa-envelope
+    - label: Join the waitlist
+      url: '#start'
+      icon: fa-regular fa-bell
       primary: true
     - label: See it in action
       url: '#videos'
@@ -158,4 +158,20 @@ app:
   cta_plain: Help shape Prosce
   cta_accent: nium
   cta_text: Proscenium is a work in progress. Subscribe for occasional notes on what's landed, or get in touch with questions, ideas or a game you'd like to build with it.
+
+  # Posts to io.ryos.api at /api/waitlist (same origin). The product key must be
+  # one the API knows — see app.waitlist.products in application.properties.
+  waitlist:
+    product: proscenium
+    eyebrow: Early alpha · Not yet released
+    title_plain: Join the
+    title_accent: waitlist
+    text: >-
+      Proscenium isn't out yet. Leave your email and I'll let you know the moment
+      the first build is ready to download — just the release, nothing else.
+    placeholder: you@example.com
+    button: Notify me at launch
+    done_title: You're on the list
+    done_text: Check your inbox and confirm your email — that link is what locks in your spot.
+    confirmed_text: You're confirmed. I'll email you the moment Proscenium is ready.
 ---

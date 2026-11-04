@@ -217,9 +217,37 @@ layout: default
   <section class="ap-section" id="start">
     <div class="ap-frame">
       <div class="ap-cta ap-reveal">
+        {% if a.waitlist %}
+        {%- assign w = a.waitlist -%}
+        <div class="ap-mono ap-faint">{{ w.eyebrow }}</div>
+        <h2 class="ap-h1 ap-h1--cta">{{ w.title_plain }} <span class="ap-accent">{{ w.title_accent }}</span></h2>
+        <p class="ap-lede">{{ w.text }}</p>
+        <!-- Posts to the same-origin io.ryos.api service at /api/waitlist. Double
+             opt-in: the confirmation link returns here with ?waitlist=confirmed.
+             No captcha in front of it — a honeypot, the API's rate limits and the
+             opt-in itself are what keep it clean. -->
+        <div class="ap-waitlist" id="waitlist-box"
+             data-api="{{ '/api' | relative_url }}"
+             data-done-title="{{ w.done_title }}"
+             data-done-text="{{ w.done_text }}"
+             data-confirmed-text="{{ w.confirmed_text }}">
+          <form id="waitlist-form" class="ap-waitlist__form" method="POST"
+                action="{{ '/api/waitlist' | relative_url }}" novalidate>
+            <input type="hidden" name="product" value="{{ w.product }}">
+            <input class="ap-waitlist__hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <label class="screen-reader-text" for="waitlist-email">Email address</label>
+            <input id="waitlist-email" class="ap-waitlist__input" type="email" name="email" required
+                   placeholder="{{ w.placeholder }}" autocomplete="email">
+            <button type="submit" class="ap-btn ap-btn--primary ap-waitlist__btn">{{ w.button }}</button>
+          </form>
+          <p id="waitlist-message" class="ap-waitlist__msg" role="status" aria-live="polite"></p>
+        </div>
+        <script src="{{ '/assets/js/waitlist.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+        {% else %}
         <div class="ap-mono ap-faint">{{ a.cta_eyebrow }}</div>
         <h2 class="ap-h1 ap-h1--cta">{{ a.cta_plain }}<span class="ap-accent">{{ a.cta_accent }}</span></h2>
         <p class="ap-lede">{{ a.cta_text }}</p>
+        {% endif %}
       </div>
     </div>
   </section>

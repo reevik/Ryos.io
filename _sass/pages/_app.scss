@@ -59,6 +59,21 @@ body:has(.app-page) {
 
 }
 
+/* Upstream ships a .screen-reader-text helper that this theme does not define,
+   which left the waitlist's label visible beside the input. Same technique,
+   scoped to the app page so it can't collide with anything else. */
+.app-page .screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Zero-specificity resets, so the component classes below always win. */
 :where(.app-page) p {
   margin: 0;
