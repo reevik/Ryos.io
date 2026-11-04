@@ -81,7 +81,8 @@ body:has(.app-page) {
      nav's visible run — logo to the last item — is ($w - $grid-gutter-width).
      Matching that puts the frame's rules directly under the logo and the last
      nav item. Derived from the same map so the two stay aligned if the theme's
-     container ever changes. */
+     container ever changes. (Upstream uses a flat 1280px; this is the one local
+     change in this file, besides --ap-bg above.) */
   width: calc(100% - #{$grid-gutter-width});
 
   @each $bp, $w in $container-max-widths {
@@ -92,11 +93,29 @@ body:has(.app-page) {
 }
 
 .ap-section {
-  border-top: 1px solid var(--ap-line);
   scroll-margin-top: 72px;
+}
 
-  &:first-of-type {
-    border-top: 0;
+/* Sections are divided inside the frame, so the line ends at the side lines
+   rather than running on to the window edges. */
+.ap-section + .ap-section > .ap-frame {
+  border-top: 1px solid var(--ap-line);
+}
+
+/* ...and the last one closes the frame before the footer. */
+.ap-section:last-of-type > .ap-frame {
+  border-bottom: 1px solid var(--ap-line);
+}
+
+/* The page opens on the first bar's bottom line: the frame's side lines start
+   there instead of running up past it into the open space above. */
+.ap-section:first-of-type > .ap-frame {
+  border-left: 0;
+  border-right: 0;
+
+  > :not(.ap-bar:first-child) {
+    border-left: 1px solid var(--ap-line);
+    border-right: 1px solid var(--ap-line);
   }
 }
 
@@ -309,6 +328,88 @@ body:has(.app-page) {
   img {
     width: 100%;
     height: auto;
+  }
+}
+
+/* YouTube embeds keep a 16:9 player at any width. */
+.ap-video__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+.ap-video__play {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: #000;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+
+  &:hover img,
+  &:focus-visible img {
+    opacity: 1;
+  }
+}
+
+.ap-video__icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--ap-accent);
+  color: #fff;
+  font-size: 26px;
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s;
+
+  i {
+    margin-left: 4px; /* optical centre of the triangle */
+  }
+}
+
+.ap-video__play:hover .ap-video__icon {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.ap-video__note {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  transform: translateX(-50%);
+}
+
+.ap-video a {
+  text-decoration: none;
+
+  &:hover {
+    color: var(--ap-accent);
   }
 }
 
@@ -726,4 +827,85 @@ pre.ap-terminal--plain {
       justify-content: center;
     }
   }
+}
+
+/* Waitlist (CTA) */
+.ap-waitlist {
+  margin-top: 28px;
+}
+
+.ap-waitlist__form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* The spam check gets its own row under the email field and button. */
+.ap-waitlist__form altcha-widget.altcha {
+  flex-basis: 100%;
+  --altcha-border-radius: 0;
+  --altcha-border-width: 0;
+  --altcha-checkbox-border-width: 1px; /* defaults to the (now zero) outer border */
+  --altcha-border-color: var(--ap-line);
+  --altcha-color-base: var(--ap-bg);
+  --altcha-color-base-content: var(--ap-ink);
+  --altcha-color-primary: var(--ap-btn-bg);
+  --altcha-color-primary-content: var(--ap-btn-ink);
+  --altcha-checkbox-border-color: var(--ap-line);
+}
+
+.ap-waitlist__input {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding: 13px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--ap-ink);
+  background: transparent;
+  border: 1px solid var(--ap-line);
+  transition: border-color 0.2s;
+
+  &::placeholder { color: var(--ap-faint); }
+  &:focus { outline: none; border-color: var(--ap-accent); }
+  &.is-invalid { border-color: var(--ap-accent); }
+}
+
+.ap-waitlist__btn {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+/* Honeypot: in the DOM for bots, off-screen for people. */
+.ap-waitlist__hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.ap-waitlist__msg {
+  min-height: 1.2em;
+  margin: 12px 0 0;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--ap-muted);
+
+  &.is-error { color: var(--ap-accent); }
+}
+
+.ap-waitlist__done {
+  margin-top: 20px;
+}
+
+.ap-waitlist__done-title {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ap-accent);
+  margin-bottom: 8px;
 }

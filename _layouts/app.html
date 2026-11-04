@@ -10,6 +10,7 @@ layout: default
   <nav class="ap-index" aria-label="On this page">
     <a href="#{{ page.slug }}" data-ap-index="{{ page.slug }}">{{ page.title }}</a>
     <a href="#highlights" data-ap-index="highlights">Highlights</a>
+    {% if a.videos %}<a href="#videos" data-ap-index="videos">Videos</a>{% endif %}
     <a href="#screenshots" data-ap-index="screenshots">Screenshots</a>
     <a href="#under-the-hood" data-ap-index="under-the-hood">Under the hood</a>
     <a href="#start" data-ap-index="start">Get started</a>
@@ -33,7 +34,9 @@ layout: default
         <p class="ap-lede">{{ a.lede }}</p>
         <div class="ap-buttons">
           {% for b in a.buttons %}
-          <a class="ap-btn{% if b.primary %} ap-btn--primary{% endif %}" href="{{ b.url | relative_url }}">{% if b.icon %}<i class="{{ b.icon }}"></i>{% endif %}{{ b.label }}</a>
+          {%- assign first = b.url | slice: 0 -%}
+          {%- if first == '#' -%}{%- assign href = b.url -%}{%- else -%}{%- assign href = b.url | relative_url -%}{%- endif %}
+          <a class="ap-btn{% if b.primary %} ap-btn--primary{% endif %}" href="{{ href }}">{% if b.icon %}<i class="{{ b.icon }}"></i>{% endif %}{{ b.label }}</a>
           {% endfor %}
         </div>
         {% if a.note %}<div class="ap-mono ap-faint ap-hero__note">{{ a.note }}</div>{% endif %}
@@ -78,11 +81,46 @@ layout: default
     </div>
   </section>
 
-  <!-- 03 screenshots -->
+  {%- assign n = 3 -%}
+  {% if a.videos %}
+  <!-- videos -->
+  <section class="ap-section" id="videos">
+    <div class="ap-frame">
+      <div class="ap-bar">
+        <span class="ap-mono">0{{ n }} / Videos</span>
+        <span class="ap-mono ap-faint">On YouTube</span>
+      </div>
+      <div class="ap-grid{% if a.videos.size > 1 %} ap-grid--2{% endif %}">
+        {% for v in a.videos %}
+        <figure class="ap-shot ap-video{% if a.videos.size > 1 %} ap-cell ap-cell--flush{% endif %} ap-reveal">
+          <!-- Click to play: nothing loads from YouTube until the reader asks for
+               it, so a page view sets no cookies and shares no IP. The poster is
+               a local copy of the video's thumbnail. -->
+          <div class="ap-video__frame">
+            <button class="ap-video__play" type="button" data-youtube="{{ v.youtube }}"
+                    data-title="{{ page.title }} — {{ v.title }}" aria-label="Play “{{ v.title }}” (loads YouTube)">
+              {% if v.poster %}<img src="{{ v.poster | relative_url }}" alt="" loading="lazy">{% endif %}
+              <span class="ap-video__icon"><i class="fa-solid fa-play"></i></span>
+              <span class="ap-video__note ap-mono">Plays from YouTube</span>
+            </button>
+          </div>
+          <figcaption class="ap-bar ap-bar--bottom">
+            <span class="ap-mono ap-faint">{{ v.caption | default: v.title }}</span>
+            <a class="ap-mono ap-faint" href="https://www.youtube.com/watch?v={{ v.youtube }}" target="_blank" rel="noopener">YouTube ↗</a>
+          </figcaption>
+        </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {%- assign n = n | plus: 1 -%}
+  {% endif %}
+
+  <!-- screenshots -->
   <section class="ap-section" id="screenshots">
     <div class="ap-frame">
       <div class="ap-bar">
-        <span class="ap-mono">03 / Screenshots</span>
+        <span class="ap-mono">0{{ n }} / Screenshots</span>
         <span class="ap-mono ap-faint">Captured in {{ page.title }}</span>
       </div>
       {% assign first = a.shots | first %}
@@ -107,11 +145,12 @@ layout: default
     </div>
   </section>
 
-  <!-- 04 under the hood -->
+  {%- assign n = n | plus: 1 -%}
+  <!-- under the hood -->
   <section class="ap-section" id="under-the-hood">
     <div class="ap-frame">
       <div class="ap-bar">
-        <span class="ap-mono">04 / Under the hood</span>
+        <span class="ap-mono">0{{ n }} / Under the hood</span>
         <span class="ap-mono ap-faint">Plain JSON · Plain Lua</span>
       </div>
 
@@ -189,6 +228,19 @@ layout: default
 <!-- end app-page -->
 
 <script>
+  // Swap a video's poster for the YouTube player only when it is clicked.
+  document.querySelectorAll('.ap-video__play').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + btn.dataset.youtube + '?rel=0&autoplay=1';
+      f.title = btn.dataset.title;
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.allowFullscreen = true;
+      btn.replaceWith(f);
+    });
+  });
+
   (function () {
     var root = document.querySelector('.app-page');
     if (!root || !('IntersectionObserver' in window)) return;

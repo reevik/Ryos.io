@@ -26,16 +26,16 @@ app:
       icon: fa-regular fa-envelope
       primary: true
     - label: See it in action
-      url: '#screenshots'
-      icon: fa-regular fa-image
+      url: '#videos'
+      icon: fa-regular fa-circle-play
     - label: How it works
       url: '#under-the-hood'
       icon: fa-solid fa-terminal
   note: For macOS · Apple silicon
   platforms: [Rust, Bevy 0.18, Lua 5.4, Claude Code, Codex, Gemini CLI]
   hero_shot:
-    src: '/images/proscenium/proscenium-colorgrade.jpg'
-    caption: Live colour grading in Play mode
+    src: '/images/proscenium/proscenium-hero.webp'
+    caption: The editor — sun, colour grade and entity inspector
     meta: Screenshot
 
   highlights_title_plain: What's
@@ -54,9 +54,14 @@ app:
     - title: Your HUD, your way
       text: Life and mana bars, action bar, bag, quest tracker and minimap — pinned to the screen's edges and dragged into place.
 
+  videos:
+    - youtube: tIaiWKZcDcQ
+      title: Scripting a crow
+      poster: '/images/proscenium/proscenium-video-crow.jpg'
+
   shots:
-    - src: '/images/proscenium/proscenium-editor.jpg'
-      caption: Edit mode with outline, gizmo and inspector
+    - src: '/images/proscenium/proscenium-generative.webp'
+      caption: Generative 3D modelling — revise a model by describing it
     - src: '/images/proscenium/proscenium-quests.jpg'
       caption: Quests and factions during Play
     - src: '/images/proscenium/proscenium-weapons.jpg'
