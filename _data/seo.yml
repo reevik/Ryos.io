@@ -1,4 +1,6 @@
-google_analytics_id: ""  
+# Left empty on purpose: an empty string is truthy in Liquid, so quoting it
+# made the page request gtag.js with no id. Set a real id to switch analytics on.
+google_analytics_id:
 meta_twitter_site: "@zerostaticio"
 meta_twitter_creator: "@zerostaticio"
 copyright_text: 'Free Jekyll theme by <a class="zerostatic" href="https://www.zerostatic.io">www.zerostatic.io</a>'
