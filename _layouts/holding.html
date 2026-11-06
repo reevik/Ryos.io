@@ -35,6 +35,11 @@
     }
     .prose { max-width: 34rem; text-align: left; line-height: 1.6; }
     .prose h1 { font-size: 28px; margin: 32px 0 16px; }
+    .prose h2 { font-size: 19px; margin: 32px 0 8px; }
+    .prose p, .prose ul { margin: 0 0 14px; }
+    .prose ul { padding-left: 1.2em; }
+    .prose li { margin-bottom: 4px; }
+    .prose code { font-size: .92em; }
     .prose a { color: var(--accent); }
     footer {
       flex-shrink: 0; padding: 24px; text-align: center;
@@ -49,6 +54,7 @@
   <footer>
     <a href="{{ '/' | relative_url }}">ryos.io</a>
     <a href="{{ '/impressum/' | relative_url }}">Impressum</a>
+    <a href="{{ '/privacy/' | relative_url }}">Privacy</a>
   </footer>
 </body>
 </html>

@@ -53,7 +53,7 @@ jobs:
         # the pages that must exist rather than counting them. Add pages back to
         # this list, and to the live check below, when they're published again.
         run: |
-          for page in index.html impressum/index.html; do
+          for page in index.html impressum/index.html privacy/index.html; do
             test -s "_site/$page" || { echo "::error::missing _site/$page"; exit 1; }
           done
           grep -q "Coming soon" _site/index.html || { echo "::error::index.html is not the landing page"; exit 1; }
@@ -104,7 +104,7 @@ jobs:
 
       - name: Verify the live site
         run: |
-          for path in / /impressum/; do
+          for path in / /impressum/ /privacy/; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "https://${SITE}${path}")
             echo "$code  $path"
             [ "$code" = "200" ] || { echo "::error::${path} returned $code"; exit 1; }
