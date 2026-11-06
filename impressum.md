@@ -10,12 +10,7 @@ permalink: /impressum/
 <div class="prose">
 <h1>Impressum</h1>
 
-<p>Angaben gemäß § 5 DDG</p>
-
-<p>Erhan Bağdemir<br>
-Feenstieg 16<br>
-25436 Tornesch<br>
-Deutschland</p>
+<p>Erhan Bağdemir</p>
 
 <p><strong>Kontakt</strong><br>
 E-Mail: <a href="mailto:erhan@reevik.net">erhan@reevik.net</a></p>
