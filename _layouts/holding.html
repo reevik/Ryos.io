@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }}</title>
+  {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/png" href="{{ '/images/favicon.png' | relative_url }}">
+  <!-- Self-contained on purpose: system fonts and inline styles, so a visit
+       sends nothing to a third party (no Google Fonts, no CDN). -->
+  <style>
+    :root { --ink: #213148; --accent: #c9431c; --muted: #6b7486; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      display: flex; flex-direction: column; min-height: 100vh;
+      background: #fff; color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    main {
+      flex: 1 0 auto; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 48px 24px; text-align: center;
+    }
+    .logo { display: block; width: 240px; max-width: 70vw; height: auto; }
+    .soon {
+      margin: 36px 0 0; font-size: 15px; font-weight: 600;
+      letter-spacing: .32em; text-transform: uppercase; color: var(--ink);
+    }
+    .soon::before {
+      content: ""; display: block; width: 40px; height: 2px;
+      margin: 0 auto 28px; background: var(--accent);
+    }
+    .prose { max-width: 34rem; text-align: left; line-height: 1.6; }
+    .prose h1 { font-size: 28px; margin: 32px 0 16px; }
+    .prose a { color: var(--accent); }
+    footer {
+      flex-shrink: 0; padding: 24px; text-align: center;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; margin: 0 10px; }
+    footer a:hover { color: var(--ink); text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <main>{{ content }}</main>
+  <footer>
+    <a href="{{ '/' | relative_url }}">ryos.io</a>
+    <a href="{{ '/impressum/' | relative_url }}">Impressum</a>
+  </footer>
+</body>
+</html>

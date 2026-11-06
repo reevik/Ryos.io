@@ -49,13 +49,15 @@ jobs:
       - name: Sanity-check the build
         # A Jekyll build can "succeed" and still produce nothing useful. Deploying
         # that over a working site is how a site goes blank, so check first.
-        # The site builds 20 pages today; 15 leaves room for content edits while
-        # still catching a collapse to a near-empty _site.
+        # The site is in coming-soon mode, which is just two pages, so this names
+        # the pages that must exist rather than counting them. Add pages back to
+        # this list, and to the live check below, when they're published again.
         run: |
-          test -f _site/index.html || { echo "::error::no index.html in _site"; exit 1; }
-          count=$(find _site -name index.html | wc -l)
-          echo "built $count pages"
-          [ "$count" -ge 15 ] || { echo "::error::only $count pages built, expected 15+"; exit 1; }
+          for page in index.html impressum/index.html; do
+            test -s "_site/$page" || { echo "::error::missing _site/$page"; exit 1; }
+          done
+          grep -q "Coming soon" _site/index.html || { echo "::error::index.html is not the landing page"; exit 1; }
+          echo "built $(find _site -name index.html | wc -l) pages"
 
       - name: Set up SSH
         run: |
@@ -102,7 +104,7 @@ jobs:
 
       - name: Verify the live site
         run: |
-          for path in / /about/ /services/ /team/ /contact/; do
+          for path in / /impressum/; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "https://${SITE}${path}")
             echo "$code  $path"
             [ "$code" = "200" ] || { echo "::error::${path} returned $code"; exit 1; }

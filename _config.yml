@@ -16,11 +16,15 @@ home:
   limit_services: 6
 
 collections:
+  # Both collections hold Serif's demo content (accounting services, fictional
+  # staff). Not output while ryos.io is in coming-soon mode — and they should
+  # not come back as they are: advertising services and people that don't
+  # exist is misleading.
   services:
-    output: true
+    output: false
     sort_by: weight
   team:
-    output: true
+    output: false
 
 defaults:
   - scope:
