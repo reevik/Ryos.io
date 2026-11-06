@@ -40,7 +40,8 @@
     email: ["Please enter a valid email address.", "error"],
     captcha: ["That captcha didn't match — here's a new one.", "error"],
     "mail-failed": ["We couldn't send the confirmation email — please check the address and try again.", "error"],
-    "rate-limited": ["Too many attempts — please wait a few minutes and try again.", "error"],
+    "rate-limited": ["Too many attempts for this address — please try again later.", "error"],
+    network: ["Signing up from the Tor network isn't possible here — please try again from a regular connection.", "error"],
   };
 
   form.addEventListener("submit", function (e) {

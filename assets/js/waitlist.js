@@ -59,8 +59,9 @@
   var MESSAGES = {
     email: "That email address doesn't look right.",
     product: "This waitlist isn't open yet.",
-    "rate-limited": "Too many attempts — please wait a few minutes and try again.",
-    "mail-failed": "We couldn't send the confirmation email. Please check the address and try again."
+    "rate-limited": "Too many attempts for this address — please try again later.",
+    "mail-failed": "We couldn't send the confirmation email. Please check the address and try again.",
+    network: "Signing up from the Tor network isn't possible here — please try again from a regular connection."
   };
 
   form.addEventListener("submit", function (event) {
